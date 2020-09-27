@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="./src/style.css" />
+  <link rel="stylesheet" href="./src/highlight/styles/darcula.css" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600&family=Roboto+Mono&family=Source+Sans+Pro&display=swap"
+    rel="stylesheet" />
+  <title>React thoughts</title>
+</head>
+
+<body>
+  <div class="container">
+    <h2>Варианты дефолтных значений</h2>
+    <pre><code>
+    function MyFunc({ text = &quot;some text&quot; }) {
+      return &lt;div&gt;{text}&lt;/div&gt;;
+    }
+    const MySecondFunc = (props) =&gt; {
+      return &lt;div&gt;{props.name || &quot;User&quot;}&lt;/div&gt;;
+    };
+    class MyClassComponent extends React.Component {
+      render() {
+        return &lt;div&gt;{this.props.name || &quot;User from class&quot;}&lt;/div&gt;;
+      }
+    }
+    </code></pre>
+  </div>
+  <script src="./src/highlight/highlight.pack.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad();
+  </script>
+</body>
+
+</html>
