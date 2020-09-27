@@ -46,6 +46,98 @@
       }
     }
     </code></pre>
+    <h2>Дочерние компоненты</h2>
+    <pre><code>
+    const WelcomeAnn = () =&gt; {
+      return &lt;span&gt;Hello, Ann!&lt;/span&gt;;
+    };
+    
+    const Welcome = (props) =&gt; {
+      return props.children;
+    };
+    //... 
+    &lt;Welcome&gt;
+      &lt;WelcomeAnn /&gt;
+    &lt;/Welcome&gt;
+    </code></pre>
+    <p>Для случая с разметкой было бы с фигурными скобками</p>
+    <pre><code>
+    const Welcome = (props) =&gt; {
+      return &lt;h2&gt;{props.children}&lt;/h2&gt;;
+    };
+    </code></pre>
+    <h2>Условные операторы</h2>
+    <pre><code>
+      // отрендорить children или default параметр
+      const WelcomeAnn = () =&gt; {
+        return &lt;span&gt;Hello, Ann!&lt;/span&gt;;
+      };
+      
+      const Welcome = (props) =&gt; {
+        return &lt;h2&gt;{props.children ? props.children : &quot;default text&quot;}&lt;/h2&gt;;
+      };
+      // ... 
+      &lt;Welcome&gt;
+          &lt;WelcomeAnn /&gt; // Hello, Ann!
+      &lt;/Welcome&gt;
+      &lt;Welcome&gt;
+                      // default text
+      &lt;/Welcome&gt;
+    </code></pre>
+    <p>можно переписать с if</p>
+    <pre><code>
+    const Welcome = (props) =&gt; {
+      if (props.children) {
+        return &lt;h2&gt;{props.children}&lt;/h2&gt;;
+      } else {
+        return &lt;h2&gt;default text&lt;/h2&gt;;
+      }
+    };
+    </code></pre>
+    <p>Или так</p>
+    <pre><code>
+    const Welcome = (props) =&gt; {
+      return props.children || &lt;h3&gt;default text&lt;/h3&gt;;
+    };
+    // props.children не обернул в h3 т.к он был бы внутри span
+    </code></pre>
+    <p>Даже сработает такое</p>
+    <pre><code>
+    const Welcome = (props) =&gt; {
+      return (
+        &lt;h3&gt;
+          {props.children &amp;&amp; props.children}
+          {!props.children &amp;&amp; &quot;default text&quot;}
+        &lt;/h3&gt;
+      );
+    };
+    // важно чтобы было что то возвращенно! иначе ошибка
+    </code></pre>
+    <h2>Спрятать отренденный компонент</h2>
+    <pre><code>
+    const WelcomeAnn = ({ hide }) =&gt; {
+      if (hide) return null;
+      return &lt;span&gt;Hello, Ann!&lt;/span&gt;;
+    };
+    
+    const Welcome = (props) =&gt; {
+      if (props.children) {
+        return &lt;h3&gt;{props.children}&lt;/h3&gt;;
+      } else {
+        return &lt;h3&gt;default text&lt;/h3&gt;;
+      }
+    };
+    // .. 
+    &lt;Welcome&gt;
+      &lt;WelcomeAnn hide /&gt; // не отобразится
+    &lt;/Welcome&gt;
+    &lt;Welcome&gt;
+      &lt;WelcomeAnn /&gt; // Hello, Ann!
+    &lt;/Welcome&gt;
+    // если в первом компоненте передать hide={true}, 
+    // а во втором hide={false} - ничего не изменится 
+    </code></pre>
+
 
     <!-- container  -->
   </div>
