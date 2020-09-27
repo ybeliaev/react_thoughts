@@ -27,7 +27,27 @@
         return &lt;div&gt;{this.props.name || &quot;User from class&quot;}&lt;/div&gt;;
       }
     }
+    &lt;MyFunc text=&quot;1&quot; /&gt; // 1
+    &lt;MyFunc /&gt; // some text
+    &lt;MyFunc text=&quot;3&quot; /&gt; // 3
+    &lt;MySecondFunc name=&quot;Yura&quot; /&gt; // Yura
+    &lt;MySecondFunc /&gt; // User
+    &lt;MyClassComponent name=&quot;John&quot; /&gt; // John
+    &lt;MyClassComponent /&gt; // User from class
     </code></pre>
+    <h2>Функция и класс</h2>
+    <pre><code>
+    const Welcome = ({ name }) =&gt; {
+      return &lt;h2&gt;Hi, {name}!&lt;/h2&gt;;
+    };
+    class WelcomeClass extends React.Component {
+      render() {
+        return &lt;h2&gt;Hi, {this.props.name}!&lt;/h2&gt;;
+      }
+    }
+    </code></pre>
+
+    <!-- container  -->
   </div>
   <script src="./src/highlight/highlight.pack.js"></script>
   <script>
