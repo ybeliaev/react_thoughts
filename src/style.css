@@ -19,7 +19,16 @@ pre code {
     font-size: 18px;
 }
 
+code strong {
+    color: tomato
+}
+
 .container {
     max-width: 900px;
     margin: 0 auto;
+}
+
+p code {
+    line-height: 1.3;
+    background-color: rgba(252, 191, 59, 0.5);
 }
