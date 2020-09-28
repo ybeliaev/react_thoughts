@@ -141,7 +141,7 @@
     <p>Чтобы свойства не очищались после вызова обработчика события исп. метод <code>event.persist()</code></p>
     <pre><code>
     const handleClick = (e) =&gt; {
-      <strong>e.persist();</strong>
+      <code>e.persist();</code>
       console.log(&quot;event&quot;, e); // в консоле свойства не будут null
     };
     
@@ -163,7 +163,7 @@
     }
       
     </code></pre>
-
+    <h3>Привязка this</h3>
     <pre><code>
     export class ClickCounter extends React.Component {
       constructor(props) {
@@ -187,7 +187,212 @@
       }
     }
     </code></pre>
+    <h3>1. bind</h3>
+    <pre><code>
+    export class ClickCounter extends React.Component {
+      constructor(props) {
+        super(props);
+        this.state = {
+          count: 0,
+        };
+        <code>this.handleClick = this.handleClick.bind(this);</code>
+      }
+      handleClick(e) {
+        e.persist();
+        console.log(&quot;event&quot;, e);
+        console.log(&quot;this&quot;, this); // this == ClickCounter 
+      }
+      render() {
+        return (
+          &lt;div&gt;
+            &lt;h2&gt;{this.state.count}&lt;/h2&gt;
+            &lt;button onClick={this.handleClick}&gt;Increment+&lt;/button&gt;
+          &lt;/div&gt;
+        );
+      }
+    }
+    </code></pre>
+    <h3>2. синтаксис общедоступных полей классов</h3>
+    <pre><code>
+    export class ClickCounter extends React.Component {
+      constructor(props) {
+        super(props);
+        this.state = {
+          count: 0,
+        };
+      }
+      handleClick = (e) =&gt; {
+        e.persist();
+        console.log(&quot;event&quot;, e);
+        console.log(&quot;this&quot;, this); // this == ClickCounter
+      };
+      render() {
+        return (
+          &lt;div&gt;
+            &lt;h2&gt;{this.state.count}&lt;/h2&gt;
+            &lt;button onClick={this.handleClick}&gt;Increment+&lt;/button&gt;
+          &lt;/div&gt;
+        );
+      }
+    }
+    </code></pre>
+    <h2>Передача аргументов</h2>
+    <pre><code>
+    export class ClickCounter extends React.Component {
+      constructor(props) {
+        super(props);
+        this.state = {
+          count: 0,
+        };
+      }
+      handleClick = (data) =&gt; (e) =&gt; {
+        e.persist();
+        console.log(&quot;event: &quot;, e);
+        console.log(&quot;data: &quot;, data); // data:  some text
+      };
+      render() {
+        return (
+          &lt;div&gt;
+            &lt;h2&gt;{this.state.count}&lt;/h2&gt;
+            &lt;button onClick={this.handleClick(&quot;some text&quot;)}&gt;Increment+&lt;/button&gt;
+          &lt;/div&gt;
+        );
+      }
+    }
+      
+    </code></pre>
+    <p>запись функции подобна к </p>
+    <pre><code>
+    handleClick = function handleClick(data) {
+      return function (e) {
+        e.persist();
+        console.log(&quot;event: &quot;, e);
+        console.log(&quot;data: &quot;, data);
+      };
+    };
+    </code></pre>
+    <p>ещё вариант передачи аргументов</p>
+    <pre><code>
+    export class ClickCounter extends React.Component {
+      constructor(props) {
+        super(props);
+        this.state = {
+          count: 0,
+        };
+      }
+      handleClick = (data, e) =&gt; {
+        e.persist();
+        console.log(&quot;event: &quot;, e);
+        console.log(&quot;data: &quot;, data);
+      };
+      render() {
+        return (
+          &lt;div&gt;
+            &lt;h2&gt;{this.state.count}&lt;/h2&gt;
+            &lt;button onClick={(e) =&gt; this.handleClick(&quot;some text&quot;, e)}&gt;
+              Increment+
+            &lt;/button&gt;
+          &lt;/div&gt;
+        );
+      }
+    }
+    </code></pre>
+    <p>И ещё</p>
+    <pre><code>
+    export class ClickCounter extends React.Component {
+      constructor(props) {
+        super(props);
+        this.state = {
+          count: 0,
+        };
+      }
+      handleClick = (data, e) =&gt; {
+        e.persist();
+        console.log(&quot;event: &quot;, e);
+        console.log(&quot;data: &quot;, data); // data:  some text
+      };
+      render() {
+        return (
+          &lt;div&gt;
+            &lt;h2&gt;{this.state.count}&lt;/h2&gt;
+            &lt;button onClick={this.handleClick.bind(this, &quot;some text&quot;)}&gt;
+              Increment+
+            &lt;/button&gt;
+          &lt;/div&gt;
+        );
+      }
+    }
+    // замечу ,что с bind аргумент event явно не передавал
+    </code></pre>
+    <h2>Работа со списками</h2>
+    <pre><code>
+    const arr = [1, 2, 3, 4, 5, 6];
+    const elements = arr.map((item) =&gt; &lt;li&gt;{item}&lt;/li&gt;);
 
+    function App() {
+      return (
+        &lt;div className=&quot;App&quot;&gt;
+          &lt;header className=&quot;App-header&quot;&gt;
+            &lt;ul&gt;<code>{elements}</code>&lt;/ul&gt; // elements в {}!
+            &lt;ClickCounter /&gt;
+          &lt;/header&gt;
+        &lt;/div&gt;
+      );
+    }
+
+    export default App;
+    </code></pre>
+    <p>В компонентах:</p>
+    <pre><code>
+      // List
+    export const List = ({items}) =&gt; {
+    const elements = items.map(item =&gt; &lt;li key={item.toString()}&gt;{item}&lt;/li&gt;)
+        return &lt;ul&gt;{elements}&lt;/ul&gt;
+    }
+    // App 
+    import { List } from &quot;./components/List&quot;;
+
+    const arr = [1, 2, 3, 4, 5];
+
+    function App() {
+      return (
+        &lt;div className=&quot;App&quot;&gt;
+          &lt;header className=&quot;App-header&quot;&gt;
+            &lt;List items={arr} /&gt;
+            &lt;ClickCounter /&gt;
+          &lt;/header&gt;
+        &lt;/div&gt;
+      );
+    }
+    </code></pre>
+    <h2>Изменение состояния</h2>
+    <pre><code>
+    export class ClickCounter extends React.Component {
+      constructor(props) {
+        super(props);
+        this.state = {
+          count: 0,
+        };
+      }
+      handleClick = (data) =&gt; (e) =&gt; {
+        <code>
+          this.setState({
+            count: this.state.count + 1
+          })
+        </code>
+      };
+      render() {
+        return (
+          &lt;div&gt;
+            &lt;h2&gt;{this.state.count}&lt;/h2&gt;
+            &lt;button onClick={this.handleClick(&quot;some text&quot;)}&gt;
+              Increment+
+            &lt;/button&gt;
+          &lt;/div&gt;
+        );
+      }
+    }
+    </code></pre>
 
     <!-- container  -->
   </div>

@@ -19,8 +19,8 @@ pre code {
     font-size: 18px;
 }
 
-code strong {
-    color: tomato
+pre code>code {
+    color: rgb(4, 235, 252)
 }
 
 .container {
