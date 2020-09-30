@@ -1,21 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./src/style.css" />
+    <link rel="stylesheet" href="./src/highlight/styles/darcula.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600&family=Roboto+Mono&family=Source+Sans+Pro&display=swap"
+      rel="stylesheet"
+    />
+    <title>React thoughts</title>
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="./src/style.css" />
-  <link rel="stylesheet" href="./src/highlight/styles/darcula.css" />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600&family=Roboto+Mono&family=Source+Sans+Pro&display=swap"
-    rel="stylesheet" />
-  <title>React thoughts</title>
-</head>
-
-<body>
-  <div class="container">
-    <h2>Варианты дефолтных значений</h2>
-    <pre><code>
+  <body>
+    <div class="container">
+      <h2>Варианты дефолтных значений</h2>
+      <pre><code>
     function MyFunc({ text = &quot;some text&quot; }) {
       return &lt;div&gt;{text}&lt;/div&gt;;
     }
@@ -35,8 +35,8 @@
     &lt;MyClassComponent name=&quot;John&quot; /&gt; // John
     &lt;MyClassComponent /&gt; // User from class
     </code></pre>
-    <h2>Функция и класс</h2>
-    <pre><code>
+      <h2>Функция и класс</h2>
+      <pre><code>
     const Welcome = ({ name }) =&gt; {
       return &lt;h2&gt;Hi, {name}!&lt;/h2&gt;;
     };
@@ -46,8 +46,8 @@
       }
     }
     </code></pre>
-    <h2>Дочерние компоненты</h2>
-    <pre><code>
+      <h2>Дочерние компоненты</h2>
+      <pre><code>
     const WelcomeAnn = () =&gt; {
       return &lt;span&gt;Hello, Ann!&lt;/span&gt;;
     };
@@ -60,14 +60,14 @@
       &lt;WelcomeAnn /&gt;
     &lt;/Welcome&gt;
     </code></pre>
-    <p>Для случая с разметкой было бы с фигурными скобками</p>
-    <pre><code>
+      <p>Для случая с разметкой было бы с фигурными скобками</p>
+      <pre><code>
     const Welcome = (props) =&gt; {
       return &lt;h2&gt;{props.children}&lt;/h2&gt;;
     };
     </code></pre>
-    <h2>Условные операторы</h2>
-    <pre><code>
+      <h2>Условные операторы</h2>
+      <pre><code>
       // отрендорить children или default параметр
       const WelcomeAnn = () =&gt; {
         return &lt;span&gt;Hello, Ann!&lt;/span&gt;;
@@ -84,8 +84,8 @@
                       // default text
       &lt;/Welcome&gt;
     </code></pre>
-    <p>можно переписать с if</p>
-    <pre><code>
+      <p>можно переписать с if</p>
+      <pre><code>
     const Welcome = (props) =&gt; {
       if (props.children) {
         return &lt;h2&gt;{props.children}&lt;/h2&gt;;
@@ -94,15 +94,15 @@
       }
     };
     </code></pre>
-    <p>Или так</p>
-    <pre><code>
+      <p>Или так</p>
+      <pre><code>
     const Welcome = (props) =&gt; {
       return props.children || &lt;h3&gt;default text&lt;/h3&gt;;
     };
     // props.children не обернул в h3 т.к он был бы внутри span
     </code></pre>
-    <p>Даже сработает такое</p>
-    <pre><code>
+      <p>Даже сработает такое</p>
+      <pre><code>
     const Welcome = (props) =&gt; {
       return (
         &lt;h3&gt;
@@ -113,8 +113,8 @@
     };
     // важно чтобы было что то возвращенно! иначе ошибка
     </code></pre>
-    <h2>Спрятать отренденный компонент</h2>
-    <pre><code>
+      <h2>Спрятать отренденный компонент</h2>
+      <pre><code>
     const WelcomeAnn = ({ hide }) =&gt; {
       if (hide) return null;
       return &lt;span&gt;Hello, Ann!&lt;/span&gt;;
@@ -137,9 +137,12 @@
     // если в первом компоненте передать hide={true}, 
     // а во втором hide={false} - ничего не изменится 
     </code></pre>
-    <h2>Обработка событий</h2>
-    <p>Чтобы свойства не очищались после вызова обработчика события исп. метод <code>event.persist()</code></p>
-    <pre><code>
+      <h2>Обработка событий</h2>
+      <p>
+        Чтобы свойства не очищались после вызова обработчика события исп. метод
+        <code>event.persist()</code>
+      </p>
+      <pre><code>
     const handleClick = (e) =&gt; {
       <code>e.persist();</code>
       console.log(&quot;event&quot;, e); // в консоле свойства не будут null
@@ -163,8 +166,8 @@
     }
       
     </code></pre>
-    <h3>Привязка this</h3>
-    <pre><code>
+      <h3>Привязка this</h3>
+      <pre><code>
     export class ClickCounter extends React.Component {
       constructor(props) {
         super(props);
@@ -187,8 +190,8 @@
       }
     }
     </code></pre>
-    <h3>1. bind</h3>
-    <pre><code>
+      <h3>1. bind</h3>
+      <pre><code>
     export class ClickCounter extends React.Component {
       constructor(props) {
         super(props);
@@ -212,8 +215,8 @@
       }
     }
     </code></pre>
-    <h3>2. синтаксис общедоступных полей классов</h3>
-    <pre><code>
+      <h3>2. синтаксис общедоступных полей классов</h3>
+      <pre><code>
     export class ClickCounter extends React.Component {
       constructor(props) {
         super(props);
@@ -236,8 +239,8 @@
       }
     }
     </code></pre>
-    <h2>Передача аргументов</h2>
-    <pre><code>
+      <h2>Передача аргументов</h2>
+      <pre><code>
     export class ClickCounter extends React.Component {
       constructor(props) {
         super(props);
@@ -261,8 +264,8 @@
     }
       
     </code></pre>
-    <p>запись функции подобна к </p>
-    <pre><code>
+      <p>запись функции подобна к</p>
+      <pre><code>
     handleClick = function handleClick(data) {
       return function (e) {
         e.persist();
@@ -271,8 +274,8 @@
       };
     };
     </code></pre>
-    <p>ещё вариант передачи аргументов</p>
-    <pre><code>
+      <p>ещё вариант передачи аргументов</p>
+      <pre><code>
     export class ClickCounter extends React.Component {
       constructor(props) {
         super(props);
@@ -297,8 +300,8 @@
       }
     }
     </code></pre>
-    <p>И ещё</p>
-    <pre><code>
+      <p>И ещё</p>
+      <pre><code>
     export class ClickCounter extends React.Component {
       constructor(props) {
         super(props);
@@ -324,8 +327,8 @@
     }
     // замечу ,что с bind аргумент event явно не передавал
     </code></pre>
-    <h2>Работа со списками</h2>
-    <pre><code>
+      <h2>Работа со списками</h2>
+      <pre><code>
     const arr = [1, 2, 3, 4, 5, 6];
     const elements = arr.map((item) =&gt; &lt;li&gt;{item}&lt;/li&gt;);
 
@@ -342,8 +345,8 @@
 
     export default App;
     </code></pre>
-    <p>В компонентах:</p>
-    <pre><code>
+      <p>В компонентах:</p>
+      <pre><code>
       // List
     export const List = ({items}) =&gt; {
     const elements = items.map(item =&gt; &lt;li key={item.toString()}&gt;{item}&lt;/li&gt;)
@@ -365,8 +368,8 @@
       );
     }
     </code></pre>
-    <h2>Изменение состояния</h2>
-    <pre><code>
+      <h2>Изменение состояния</h2>
+      <pre><code>
     export class ClickCounter extends React.Component {
       constructor(props) {
         super(props);
@@ -393,13 +396,42 @@
       }
     }
     </code></pre>
+      <h2>Сосотояние и жизненный цикл</h2>
+      <h3>Асинхронное обновление</h3>
+      <p>
+        При наличии нескольких вызовов setState() React может объединять их в
+        один общий пакет обновлений для увеличения производительности.
+      </p>
 
-    <!-- container  -->
-  </div>
-  <script src="./src/highlight/highlight.pack.js"></script>
-  <script>
-    hljs.initHighlightingOnLoad();
-  </script>
-</body>
+      <p>
+        Так как объекты this.props и this.state могут обновляться асинхронно, не
+        стоит полагаться на значения этих объектов для вычисления состояния.
+        Например:
+      </p>
+      <pre><code>
+        this.setState({
+          counter: this.state.counter + this.props.increment,
+        });
+      </code></pre>
+      <p>
+        Для обновления надо использовать другую версию функции setState(),
+        которая в качестве параметра принимает функцию. Данная функция имеет два
+        параметра: предыдущее состояние объекта state и объект props на момент
+        применения обновления:
+      </p>
+      <pre><code>
+        this.setState(function(prevState, props) {
+          return {
+            counter: prevState.counter + props.increment
+          };
+        });
+      </code></pre>
 
+      <!-- container  -->
+    </div>
+    <script src="./src/highlight/highlight.pack.js"></script>
+    <script>
+      hljs.initHighlightingOnLoad();
+    </script>
+  </body>
 </html>
