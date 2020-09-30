@@ -32,3 +32,9 @@ p code {
     line-height: 1.3;
     background-color: rgba(252, 191, 59, 0.5);
 }
+
+.alert {
+    padding: 5px 10px;
+    background-color: rgb(231, 229, 104);
+    border-left: 4px solid rgb(255, 187, 0);
+}

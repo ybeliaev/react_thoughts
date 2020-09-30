@@ -399,14 +399,15 @@
       <h2>Сосотояние и жизненный цикл</h2>
       <h3>Асинхронное обновление</h3>
       <p>
-        При наличии нескольких вызовов setState() React может объединять их в
-        один общий пакет обновлений для увеличения производительности.
+        При наличии нескольких вызовов <code>setState()</code> React может
+        объединять их в один общий пакет обновлений для увеличения
+        производительности.
       </p>
 
       <p>
-        Так как объекты this.props и this.state могут обновляться асинхронно, не
-        стоит полагаться на значения этих объектов для вычисления состояния.
-        Например:
+        Так как объекты <code>this.props</code> и <code>this.state</code> могут
+        обновляться асинхронно, не стоит полагаться на значения этих объектов
+        для вычисления состояния. Например:
       </p>
       <pre><code>
         this.setState({
@@ -414,10 +415,11 @@
         });
       </code></pre>
       <p>
-        Для обновления надо использовать другую версию функции setState(),
-        которая в качестве параметра принимает функцию. Данная функция имеет два
-        параметра: предыдущее состояние объекта state и объект props на момент
-        применения обновления:
+        Для обновления надо использовать другую версию функции<code>
+          setState()</code
+        >, которая в качестве параметра принимает функцию. Данная функция имеет
+        два параметра: предыдущее состояние объекта <code>state</code> и объект
+        <code>props</code> на момент применения обновления:
       </p>
       <pre><code>
         this.setState(function(prevState, props) {
@@ -426,6 +428,83 @@
           };
         });
       </code></pre>
+      <h2>Добавление методов жизненного цикла</h2>
+      <p>
+        первоначальный рендеринг компонента в DOM - mounting( монтирование )
+      </p>
+      <p>Размонтирование ( unmounting ) - узел удаляется</p>
+      <p>
+        <code>componentDidMount()</code> запускается после того, как компонен
+        отренд. в DOM
+      </p>
+      <p>Пример с часами</p>
+      <pre><code>
+      // ***** Clock ****
+      import React from &quot;react&quot;;
+
+      export class Clock extends React.Component{
+          constructor(props) {
+              super(props);
+              this.state = {date: new Date()}
+          }
+          componentDidMount() {
+              this.timerID = setInterval(() =&gt; this.tick(), 1000)
+          }
+          componentWillUnmount() {
+              clearInterval(this.timerID)
+          }
+          tick(){
+              this.setState({
+                  date: new Date()
+              })
+          }
+
+          render() {
+              return(
+                  &lt;div&gt;
+                      &lt;h2&gt;Hi, clock!&lt;/h2&gt;
+                      &lt;h3&gt;now {this.state.date.toLocaleTimeString()}&lt;/h3&gt;
+                  &lt;/div&gt;
+              )
+          }
+      }
+      // **** App ****
+      ... 
+      &lt;Clock /&gt;
+      ...
+
+      </code></pre>
+      <p>Тикает!</p>
+      <div class="alert">
+        <p>Не копируйте пропсы в состояние:</p>
+        <pre><code>
+          this.setState({
+            value: props.value
+        })
+        </code></pre>
+        <p>Не менять состояние в конструкторе</p>
+      </div>
+      <p>
+        <code>componentDidUpdate(prevProps, prevState)</code>: вызывается сразу
+        после обновления компонента (если shouldComponentUpdate возвращает
+        true). В качестве параметров передаются старые значения объектов
+        <code>props</code> и <code>state</code>.
+      </p>
+      <pre><code>
+      // если userID не изменился - не нужно что то делать
+      componentDidUpdate(prevProps, prevState, snapshot) {
+        if(this.props.userID !== prevProps.userID)
+            // что то делать
+      }
+      // можно и setState но только с условием if, иначе возможен бесконечный цикл
+      </code></pre>
+      <div class="alert">
+        <p>
+          <code>componentWillUnmount()</code>: вызывается перед удалением
+          компонента из DOM - отмена таймера, подписок..созданных в
+          componentWillMount()
+        </p>
+      </div>
 
       <!-- container  -->
     </div>
