@@ -571,7 +571,51 @@
           или таймеры.
         </p>
       </div>
-      <h2>Справка по хукам</h2>
+      <h2>Справка и примеры по хукам</h2>
+      <h3>Зачем локальное состояние</h3>
+      <pre><code>
+      function App(){
+        let nums = [1,2,3]
+        const addNum = () =&gt; {
+          nums.push(5)
+        }
+        return(
+          &lt;div&gt;
+            &lt;ul&gt;
+              {nums.map(item =&gt; {
+                &lt;li&gt;{item}&lt;/li&gt;
+              })}
+            &lt;/ul&gt;
+            &lt;button onClick={addNum} &gt;New number&lt;/button&gt;
+          &lt;/div&gt;
+        )
+      }
+      // ПРИ НАЖАТИИ СПИСОК в DOM НЕ ОБНОВИТСЯ! React не отобразит изменения
+      </code></pre>
+      <pre><code>
+      function App(){
+        let [nums, setNums] = React.useState([1,2,3])
+        const addNum = () =&gt; {
+          let randNumber = Math.trunc(Math.rand() * 10)
+          setNums([...nums, randNumber])          
+        }
+        return(
+          &lt;div&gt;
+            &lt;ul&gt;
+              {nums.map(item =&gt; {
+                &lt;li&gt;{item}&lt;/li&gt;
+              })}
+            &lt;/ul&gt;
+            &lt;button onClick={addNum} &gt;New number&lt;/button&gt;
+          &lt;/div&gt;
+        )
+      }
+      // OK!
+      </code></pre>
+      <p>
+        Т.е <code>useState</code> нужно , если изменяется переменая и соотв.
+        должен происходить рирендер. В ином случае достаточно просто переменная.
+      </p>
 
       <!-- container  -->
     </div>
