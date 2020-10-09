@@ -616,6 +616,72 @@
         Т.е <code>useState</code> нужно , если изменяется переменая и соотв.
         должен происходить рирендер. В ином случае достаточно просто переменная.
       </p>
+      <h3>UseEffect. Разбор.</h3>
+      <p>Начну с повтора классовых компонентов.</p>
+      <pre><code>
+    componentDidMount // компонент был отображён/внедрён на странице и можно что-то сделать
+    componentDidUpdate // в компоненте были изменения и сработает логика в теле метода(componentDidMount вызываться не будет)
+    componentWillUnmount // компонент будет удалён и перед удалением сработает логика в теле метода
+      </code></pre>
+      <pre><code>
+      // List 
+      class List extends React.Component{
+        state = {
+          numbers: [1,2,3]
+        }
+        addNumbers = () =&gt; {
+          let randNumber = Math.trunc(Math.random() * 10)            
+          this.setState({
+            numbers: [...this.state.numbers, randNumber]
+          })
+        }
+        componentDidMount(){
+          // 1 раз при монтировании/рендере компонента. При изменениях не вызывается
+          console.log("Компонент был отображён!") 
+        }
+        сomponentDidUpdate(prevProps, prevState){ // prevProps - старый props prevState - старый state
+          console.log("Изменился state или props!") 
+          // при первом  рендере НЕ сработает. Сработает при нажатии на button
+          // при нажатии, напр., получу число 10
+          // prevProps: {} prevState: numbers: [1,2,3]
+          // this.props ( props после изменения ): {} - нет изменений
+          // this.state: numbers: [1,2,3,10]
+          if(this.state.numbers.length !== prevState.numbers.length){
+            // сработает при каждом добавлении числа
+            console.log("Обновился список чисел!") 
+          }
+        }
+
+        render(){
+          return(
+            &lt;div&gt;
+              &lt;ul&gt;
+                {this.state.numbers.map(i =&gt; {
+                  &lt;li&gt;{i}&lt;/li&gt;
+                })}
+              &lt;/ul&gt;
+              &lt;button onClick={this.addNumbers}&gt;Click&lt;/button&gt;
+            &lt;/div&gt;
+          )
+        }
+      }
+
+
+      // App 
+      let [visibleList, setVisibleList] = React.useState(true)
+      function App(){
+        let toggleList = () => {
+          setVisibleList((visible) => !visible)// чтобы не передалось старое состояние, исп. анонимную функцию
+        }
+        return(
+        &lt;div className = &quot;App&quot;&gt;
+          {visibleList && &lt;List/&gt;} // если visibleList == true , то компонент отобразится 
+          &lt;button onClick={toggleList}&gt;Click&lt;/button&gt;
+        &lt;/div&gt;
+        )
+      }
+      // при отображении компонента после его удаления будет вызываться componentDidMount()
+      </code></pre>
 
       <!-- container  -->
     </div>
