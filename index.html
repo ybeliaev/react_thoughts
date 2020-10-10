@@ -665,12 +665,11 @@
           )
         }
       }
-
-
       // App 
       let [visibleList, setVisibleList] = React.useState(true)
       function App(){
         let toggleList = () => {
+          // setVisibleList может получать как само значение так и функцию
           setVisibleList((visible) => !visible)// чтобы не передалось старое состояние, исп. анонимную функцию
         }
         return(
@@ -681,6 +680,58 @@
         )
       }
       // при отображении компонента после его удаления будет вызываться componentDidMount()
+      </code></pre>
+      <p>теперь как понять, что компонент был удалён - использовать <code>componentWillUnmount</code></p>
+      <pre><code>
+        // List 
+      class List extends React.Component{
+        state = {
+          numbers: [1,2,3]
+        }
+        addNumbers = () =&gt; {
+          let randNumber = Math.trunc(Math.random() * 10)            
+          this.setState({
+            numbers: [...this.state.numbers, randNumber]
+          })
+        }
+        componentDidMount(){          
+          console.log("Компонент был отображён!") 
+        }
+        сomponentDidUpdate(prevProps, prevState){                       
+          if(this.state.numbers.length !== prevState.numbers.length){            
+            console.log("Обновился список чисел!") 
+          }
+        }
+        componentWillUnmount(){
+          console.log("Компонент будет удалён!")
+        }
+
+        render(){
+          return(
+            &lt;div&gt;
+              &lt;ul&gt;
+                {this.state.numbers.map(i =&gt; {
+                  &lt;li&gt;{i}&lt;/li&gt;
+                })}
+              &lt;/ul&gt;
+              &lt;button onClick={this.addNumbers}&gt;Click&lt;/button&gt;
+            &lt;/div&gt;
+          )
+        }
+      }
+      // App 
+      let [visibleList, setVisibleList] = React.useState(true)
+      function App(){
+        let toggleList = () => {          
+          setVisibleList((visible) => !visible)
+        }
+        return(
+        &lt;div className = &quot;App&quot;&gt;
+          {visibleList && &lt;List/&gt;} 
+          &lt;button onClick={toggleList}&gt;Click&lt;/button&gt;
+        &lt;/div&gt;
+        )
+      }
       </code></pre>
 
       <!-- container  -->
