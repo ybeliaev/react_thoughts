@@ -703,6 +703,7 @@
           }
         }
         componentWillUnmount(){
+          // надпись выведется при (перед) удалении компонента List
           console.log("Компонент будет удалён!")
         }
 
@@ -732,6 +733,93 @@
         &lt;/div&gt;
         )
       }
+      </code></pre>
+      <h3>Тоже самое на хуках</h3>
+      <pre><code>
+        //*** List***
+
+        const List = () =&gt; {
+          let [numbers, setNumbers] = React.useState([1,2,3])
+
+          let addNumber = () =&gt; {
+            let randNumber = Math.round(Math.random() * 10)
+            let newArr = [...numbers, randNumber]
+            setNumbers(newArr)
+          }
+        }
+
+        React.useEffect(() =&gt; {
+          console.log(&quot;Компонент был отображён!&quot;) 
+        }, [])
+        // если  useEffect() получает вторым элементом пустой масив -  componentDidMount()
+        // ни за какими элементами следить не нужно, только вызваться при отображении компонента
+        // консоль сработает только при первом отображении компонента
+        // если ничего не передать , то useEffect() будет при и при первом рендере и при обновлениях
+        return(
+          &lt;div&gt;
+            &lt;ul&gt;
+              {numbers.map(i =&gt; {
+                &lt;li&gt;{i}&lt;/li&gt;
+              })}
+            &lt;/ul&gt;
+            &lt;button onClick={addNumbers}&gt;Click&lt;/button&gt;
+          &lt;/div&gt;
+        ) 
+
+        // ***App*** 
+      let [visibleList, setVisibleList] = React.useState(true)
+      function App(){
+        let toggleList = () => {          
+          setVisibleList((visible) => !visible)
+        }
+        return(
+        &lt;div className = &quot;App&quot;&gt;
+          {visibleList && &lt;List/&gt;} 
+          &lt;button onClick={toggleList}&gt;Click&lt;/button&gt;
+        &lt;/div&gt;
+        )
+      }          
+      // 
+      </code></pre>
+      <pre><>
+        //*** List***
+
+        const List = () =&gt; {
+          let [numbers, setNumbers] = React.useState([1,2,3])
+          let [count, setCount] = React.useState(0)
+
+
+          let addNumber = () =&gt; {
+            let randNumber = Math.round(Math.random() * 10)
+            let newArr = [...numbers, randNumber]
+            setNumbers(newArr)
+          }
+        }
+
+        React.useEffect(() =&gt; {
+          console.log("Список чисел был обновлён") 
+        }, [numders])        
+        
+        return(
+          &lt;div&gt;
+          &lt;button onClick={() => setCount(count+1)}&gt;Click count&lt;/button&gt;
+          &lt;h2&gt;{count}&lt;/div&gt;          
+            &lt;ul&gt;
+              {numbers.map(i =&gt; {
+                &lt;li&gt;{i}&lt;/li&gt;
+              })}
+            &lt;/ul&gt;
+            &lt;button onClick={addNumbers}&gt;Add number&lt;/button&gt;
+          &lt;/div&gt;
+        ) 
+        // жму Add number - вызывается "Список чисел был обновлён"
+        // жму Click count - ничего
+      </code></pre>
+      <pre><code>
+        React.useEffect(() =&gt; {
+          console.log("Список чисел был обновлён") 
+        }, [numders, count]) 
+        // теперь и при нажатии на Click count консоль сработает
       </code></pre>
 
       <!-- container  -->
