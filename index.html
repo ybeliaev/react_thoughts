@@ -841,7 +841,7 @@
           let[numbers, setNumbers] = React.useState([1,2,3,4,5])
           let addNumber = () =&gt; {
             let lastNumber = numbers[numbers.length - 1]
-            set([...numbers, lastNumber])
+            setNumbers([...numbers, lastNumber])
           }
           return(
             &lt;div&gt;
@@ -862,7 +862,7 @@
           let[numbers, setNumbers] = React.useState([1,2,3,4,5])
           let addNumber = () =&gt; {
             let lastNumber = numbers[numbers.length - 1]
-            set([...numbers, lastNumber])
+            setNumbers([...numbers, lastNumber])
           }
 
           let handleScroll = () => {
@@ -901,7 +901,7 @@
           let[numbers, setNumbers] = React.useState([1,2,3,4,5])
           let addNumber = () =&gt; {
             let lastNumber = numbers[numbers.length - 1]
-            set([...numbers, lastNumber])
+            setNumbers([...numbers, lastNumber])
           }
 
           let handleScroll = () => {
@@ -939,7 +939,92 @@
           ..
         }
       </code></pre>
-      <p>Но после добавлении нового числа к массиву ulElem будет не <code>ul</code>, а <code>underfined</code></p>
+      <p>Но после добавлении нового числа к массиву <code>ulElem</code> будет не <code>ul</code>, а <code>underfined</code></p>
+      <p>Причина в том ,что при обновлении компонента(<code>App</code> в данном случае) - это обновление пропсов или стейт будет перерендеринг ,т.е новый вызов <code>App</code> - переменные будут пересоздаваться</p>
+      <pre><code>
+        // ***App*** 
+        function App(){
+          let[numbers, setNumbers] = React.useState([1,2,3,4,5])
+          let ulRef = React.useRef();
+          console.log(ulRef) // { current: undefined } не пересоздаётся при обновлении компонента
+          // при &lt;ul ref={ulRef}&gt; { current: ul }
+          
+          return(
+            &lt;div&gt;
+              &lt;ul ref={ulRef}&gt;
+                {numbers.map((i, idx) =&gt; {
+                  &lt;li key={idx}&gt;{i}&lt;/li&gt;
+                })}
+              &lt;/ul&gt;
+              &lt;button onClick={addNumber}&gt;Add number&lt;/button&gt;
+              &lt;button onClick={removeScroll}&gt;Remove scroll&lt;/button&gt;
+            &lt;/div&gt;
+          )          
+        }
+        </code></pre>
+        <p>теперь код будет выглядеть</p>
+        <pre><code>
+          // ***App*** 
+        function App(){
+          let[numbers, setNumbers] = React.useState([1,2,3,4,5])
+          let ulRef = React.useRef();
+          
+          let addNumber = () =&gt; {
+            let lastNumber = numbers[numbers.length - 1]
+            setNumbers([...numbers, lastNumber])
+          }
+
+          let handleScroll = () => {
+            console.log("Был скролл")
+          }
+
+          React.useEffect(() => {            
+            ulRef.current.addEventListener("scroll", handleScroll)
+          }, [])
+
+          let removeScroll = () => {
+            ulRef.current.removeEventListener("scroll", handleScroll)
+          }
+          return(
+            &lt;div&gt;
+              &lt;ul ref={ulRef}&gt;
+                {numbers.map((i, idx) =&gt; {
+                  &lt;li key={idx}&gt;{i}&lt;/li&gt;
+                })}
+              &lt;/ul&gt;
+              &lt;button onClick={addNumber}&gt;Add number&lt;/button&gt;
+              &lt;button onClick={removeScroll}&gt;Remove scroll&lt;/button&gt;
+            &lt;/div&gt;
+          )          
+        } 
+        </code></pre>
+        <p>Ещё применение useRef</p>
+        <pre><code>
+        function App(){
+          let timer;
+          let[numbers, setNumbers] = React.useState([1,2,3,4,5])
+          let ulRef = React.useRef();
+          
+          let addNumber = () =&gt; {
+            let lastNumber = numbers[numbers.length - 1]
+            setNumbers([...numbers, lastNumber])
+          }
+          let start = () => {
+            timer = setInterval(addNumber, 1000) //каждый раз при вызове функции, numbers будет иметь старое значение
+          }
+          let stop = () => {
+            clearInterval(timer)
+          }
+          .. там кнопки "старт" "стоп" "добавить число"
+        }
+        </code></pre>
+        <p>как исправить</p>
+        <pre><code>
+        let addNumber = () =&gt; {          
+          setNumbers(prev =>[... prev, prev[prev.length - 1] + 1])
+        }
+        // но кнопка стоп не работает
+        </code></pre>
 
       <!-- container  -->
     </div>
