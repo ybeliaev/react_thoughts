@@ -834,6 +834,112 @@
         // но при нажатии на ту же кнопку с результатом отображения - "Component will UnMount!" нет
         
       </code></pre>
+      <h2>useRef</h2>
+      <pre><code>
+        // ***App*** 
+        function App(){
+          let[numbers, setNumbers] = React.useState([1,2,3,4,5])
+          let addNumber = () =&gt; {
+            let lastNumber = numbers[numbers.length - 1]
+            set([...numbers, lastNumber])
+          }
+          return(
+            &lt;div&gt;
+              &lt;ul&gt;
+                {numbers.map((i, idx) =&gt; {
+                  &lt;li key={idx}&gt;{i}&lt;/li&gt;
+                })}
+              &lt;/ul&gt;
+              &lt;button onClick={addNumber}&gt;Add number&lt;/button&gt;
+            &lt;/div&gt;
+          )
+        }
+      </code></pre>
+      <p>Задача выдать что-то в консоль при скролле</p>
+      <pre><code>
+        // ***App*** 
+        function App(){
+          let[numbers, setNumbers] = React.useState([1,2,3,4,5])
+          let addNumber = () =&gt; {
+            let lastNumber = numbers[numbers.length - 1]
+            set([...numbers, lastNumber])
+          }
+
+          let handleScroll = () => {
+            console.log("Был скролл")
+          }
+
+          let ulElem = document.querySelector("ul")
+          ulElem.addEventListener("scroll", handleScroll)
+          // будет ошибка: ulElem == null, поэтому null.addEventListener это TypeError
+          // это потому, что код ДО рендера разметки(которая в return)
+          return(
+            &lt;div&gt;
+              &lt;ul&gt;
+                {numbers.map((i, idx) =&gt; {
+                  &lt;li key={idx}&gt;{i}&lt;/li&gt;
+                })}
+              &lt;/ul&gt;
+              &lt;button onClick={addNumber}&gt;Add number&lt;/button&gt;
+            &lt;/div&gt;
+          )
+        }
+      </code></pre>
+      <p>Попытка два: использую useEffect</p>
+      <pre><code>
+        React.useEffect(() => {
+          let ulElem = document.querySelector("ul")
+          ulElem.addEventListener("scroll", handleScroll)
+        }, [])
+        // т.е говорю: при первом рендере выполни этот код
+        // скролл работает
+      </code></pre>
+      <p>Что если хочу удалять скролл</p>
+      <pre><code>
+        // ***App*** 
+        function App(){
+          let[numbers, setNumbers] = React.useState([1,2,3,4,5])
+          let addNumber = () =&gt; {
+            let lastNumber = numbers[numbers.length - 1]
+            set([...numbers, lastNumber])
+          }
+
+          let handleScroll = () => {
+            console.log("Был скролл")
+          }
+
+          React.useEffect(() => {
+            let ulElem = document.querySelector("ul")
+            ulElem.addEventListener("scroll", handleScroll)
+          }, [])
+
+          let removeScroll = () => {
+            ulElem.removeEventListener("scroll", handleScroll)
+          }
+          // разумеется, так не сработает ulElem is not defined, т.к она инициал. в другой функции
+
+          return(
+            &lt;div&gt;
+              &lt;ul&gt;
+                {numbers.map((i, idx) =&gt; {
+                  &lt;li key={idx}&gt;{i}&lt;/li&gt;
+                })}
+              &lt;/ul&gt;
+              &lt;button onClick={addNumber}&gt;Add number&lt;/button&gt;
+              &lt;button onClick={removeScroll}&gt;Remove scroll&lt;/button&gt;
+            &lt;/div&gt;
+          )
+        }
+      </code></pre>
+      <p>Одно из решений(тупое, конечно) - вынести <code>ulElem</code> в родит. функцию, чтобы её видели все по замыканию</p>
+      <pre><code>
+        // ***App*** 
+        function App{
+          let ulElem;
+          ..
+        }
+      </code></pre>
+      <p>Но после добавлении нового числа к массиву ulElem будет не <code>ul</code>, а <code>underfined</code></p>
 
       <!-- container  -->
     </div>
