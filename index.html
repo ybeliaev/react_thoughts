@@ -1023,8 +1023,95 @@
         let addNumber = () =&gt; {          
           setNumbers(prev =>[... prev, prev[prev.length - 1] + 1])
         }
-        // но кнопка стоп не работает
+        // но кнопка стоп не работает ,т.к timer пересоздаётся
         </code></pre>
+        <pre><code>
+          function App(){
+            
+            let[numbers, setNumbers] = React.useState([1,2,3,4,5])
+            let timerRef = React.useRef();
+            
+            let addNumber = () => {          
+              setNumbers(prev =>[... prev, prev[prev.length - 1] + 1])
+            }
+            let start = () => {
+              timerRef.current = setInterval(addNumber, 1000) 
+            }
+            let stop = () => {
+              clearInterval(timerRef.current)
+            }
+            ..            
+          }
+        </code></pre>
+        <h2>Состояние и жизненный цикл</h2>
+        <div class="alert">
+          <p>Функция - компонент, когда она получает данные в одном объекте(пропсы) в качестве параметра и возвращает React-элемент</p>
+        </div>
+        <div class="alert">
+          <p> React-элемент содержит DOM-теги и\или собственные компоненты:</p>
+        </div>
+        <pre><code>
+          let element1 = &lt;div /&gt;
+          let element2 = &lt;Wellcome name="Elly" /&gt;
+        </code></pre>
+        <div class="alert">
+          <p>React-компоненты обязаны вести себя как чистые функции по отношению к своим пропсам</p>
+        </div>
+        <ul>
+          <li>
+            <span>Состояние нельзя менять напрямую. Только в конструкторе(если классовый компонент)</span>
+            <pre><code>
+              this.state.count = this.state.count + 1
+            </code></pre>
+            <pre><code>
+              this.setState({count: this.state.count + 1})
+            </code></pre>
+          </li>
+
+          <li>
+            <span>this.props и this.state могут обновляться ассинхронно</span>
+            <pre><code>
+              // this.props.incriment получаю ассинхронно
+              // так неправильно:
+              this.setState({count: this.state.count + this.props.incriment})
+            </code></pre>
+            <pre><code>
+              // функция получит предидущее состояние как первый аргумент
+              // значение пропсов непосредственно во время обновления как второй аргумент 
+              this.setState( (state, props) => ({ count: state.count + props.incriment }) )
+              // или обычная функция
+              this.setState( function(state, props) { return  { count: state.count + props.incriment }} )
+            </code></pre>
+          </li>
+          <li>
+            Состояния могут объединяться
+            <pre><code>
+              export class ClickCounter extends React.Component{
+                constructor(props){
+                  super(props);
+                  this.state = {
+                    count: 0,
+                    fetchData1: {
+                      value: "value",
+                      data: ["some text", "text"]
+                    },
+                    fetchData2: [1,2,3]
+                  }
+                }
+                handleClick = (data) => (e) => {
+                  this.setState( (state, props) => ({ fetchData2: [4,5,6] }) )
+                  // newFetchData - какой-то объект, пришедший из пропс                  
+                  this.setState( (state, props) => ({ fetchData1: props.newFetchData }) ) 
+                  // если нужно только одно свойство обновить:
+                  this.setState( (state, props) => ({ fetchData1: {
+                    value: this.props.newFetchData.value,
+                    data: [1,2,3]
+                  } }) ) 
+                }
+              }
+            </code></pre>
+          </li>
+        </ul>
 
       <!-- container  -->
     </div>
