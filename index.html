@@ -436,7 +436,7 @@
       <p>Размонтирование ( unmounting ) - узел удаляется</p>
       <p>
         <code>componentDidMount()</code> запускается после того, как компонен
-        отренд. в DOM
+        отренд. в DOM. Хорошее место для сетевых запросов, настройки подписок(не забыть отписаться)
       </p>
       <div class="alert">
         <p>
@@ -504,7 +504,11 @@
       ... 
       &lt;Clock /&gt;
       ...
-
+      // 1. вызов конструктора компонента, задаётся начальное состояние this.state
+      // 2. вызов метода render() компонента Clock . Таким образом реакт узнаёт, что отобразить
+      // 3. Обновление DOM в соответствии с render()
+      // 4. Как только вставка в DOM произошла, Реакт вызывает метод жизненного цикла componentDidMount()
+      // 5. Реакт реагирует на изменение состояния(запуск tick()) и снова запускает метод render()
       </code></pre>
       <p>Тикает!</p>
       <div class="alert">
@@ -554,7 +558,7 @@
         <p>
           <code>componentWillUnmount()</code>: вызывается перед удалением
           компонента из DOM - отмена таймера, подписок..созданных в
-          componentWillMount()
+          componentWillMount(). Не использовать setState, т.к компонент никогда не рендорится повторно, т.к размонтирован
         </p>
       </div>
       <div class="alert">
@@ -1112,6 +1116,83 @@
             </code></pre>
           </li>
         </ul>
+        <div class="alert">
+          <p>Единственный обязательный метод в классовом компоненте - render(). При вызове он проверяет <code>this.props</code> и <code>this.state</code></p>
+        </div>
+        <div class="alert">
+          <p>Не копируйте пропсы в состояние:</p>
+          <pre><code>
+            constructor(props){
+              super(props);
+              this.state = {
+                someValue: props.someValue
+              }
+            }
+          </code></pre>
+        </div>
+        <h2>Работа с формами</h2>
+        <h3>Управляемый компонент</h3>
+        <pre><code>
+          class NameForm extends React.Component {
+            constructor(props) {
+              super(props);
+              this.state = {value: ""};
+          
+              this.handleChange = this.handleChange.bind(this);
+              this.handleSubmit = this.handleSubmit.bind(this);
+            }
+          
+            handleChange(event) {
+              this.setState({value: event.target.value});
+            }
+          
+            handleSubmit(event) {
+              alert(&#039;Отправленное имя: &#039; + this.state.value);
+              event.preventDefault();
+            }
+          
+            render() {
+              return (
+                &lt;form onSubmit={this.handleSubmit}&gt;
+                  &lt;label&gt;
+                    Имя:
+                    &lt;input type=&quot;text&quot; value={this.state.value} onChange={this.handleChange} /&gt;
+                    // если убрать value={this.state.value} onChange={this.handleChange}
+                    // то написать что-ито в поле input будет невозможно, т.к this.state = {value: ""};
+                  &lt;/label&gt;
+                  &lt;input type=&quot;submit&quot; value=&quot;Отправить&quot; /&gt;
+                &lt;/form&gt;
+              );
+            }
+          }
+        </code></pre>
+        <h3>Неуправляемый компонент</h3>
+        <pre><code>
+          class NameForm extends React.Component {
+            constructor(props) {
+              super(props);              
+              this.handleSubmit = this.handleSubmit.bind(this);
+              this.input = React.createRef();
+            }          
+            
+            handleSubmit(event) {
+              event.preventDefault();
+              alert(&#039;Отправленное имя: &#039; + this.input.current.value);
+            }
+          
+            render() {
+              return (
+                &lt;form onSubmit={this.handleSubmit}&gt;
+                  &lt;label&gt;
+                    Имя:
+                    &lt;input type=&quot;text&quot; ref = {this.input} /&gt;
+                  &lt;/label&gt;
+                  &lt;input type=&quot;submit&quot; value=&quot;Отправить&quot; /&gt;
+                &lt;/form&gt;
+              );
+            }
+          }
+        </code></pre>
 
       <!-- container  -->
     </div>
