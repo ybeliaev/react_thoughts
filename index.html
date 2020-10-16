@@ -1193,6 +1193,20 @@
             }
           }
         </code></pre>
+        <h2>Запись через точку</h2>
+        <h3>Это удобно, если есть модуль, экспортирующий много React-элементов</h3>
+        <pre><code>
+          import React from "react"
+
+          const MyComponent = {
+            DatePicker: function DatePicker(props){
+              return &lt;div&gt; some color {props.color} &lt;/div&gt;
+            }
+          }
+          function BlueDatePicker(){
+            return &lt;MyComponent.DatePicker color="blue"/&gt;
+          }
+        </code></pre>
 
       <!-- container  -->
     </div>
