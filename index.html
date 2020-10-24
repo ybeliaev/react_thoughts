@@ -1208,6 +1208,121 @@
           }
         </code></pre>
 
+        <h2>Применение clsx</h2>
+        <pre><code>
+          // App()
+        import { Button } from "./components/Button/Button";
+        import { Icon } from "./components/Icon/Icon";
+
+        function App() {
+          return (
+            &lt;div className=&quot;App&quot;&gt;
+              &lt;header className=&quot;App-header&quot;&gt;
+                &lt;Icon iconType=&quot;plus&quot;/&gt;
+                &lt;Icon iconType=&quot;cross&quot; color=&#039;red&#039;/&gt;
+                &lt;Button 
+                size=&quot;large&quot;
+                color=&quot;secondary&quot;
+                iconType=&quot;cross&quot;
+                className=&quot;some&quot;
+                &gt;Click&lt;/Button&gt;
+              &lt;/header&gt;
+            &lt;/div&gt;
+          );
+        }
+
+
+          // Button.jsx
+          import clsx from "clsx"
+          import styles from "./Button.module.scss"
+
+          export const Button = (props) => {
+
+            const { children,className, size, color, type = "button", ...rest } = props;
+            return (
+              &lt;button 
+              type={type}
+              className={clsx([
+                  styles.btn,
+                  {
+                    [styles[size]]: size, // если будет какое то значение, то отрендерится className с таким же названием(small или large)
+                    [styles[`btn_${color}`]]: color
+                  },
+                  className
+              ])}
+              &gt;
+                 {children}
+              &lt;/button&gt;
+            )
+        }
+
+        // Button.module.scss 
+        .btn {
+          position: relative;
+          display: inline-block;
+          background: transparent;
+          border: 1px solid  #03e9f4;
+          padding: 10px 20px;
+          color: #03e9f4;
+          font-size: 16px;
+          text-decoration: none;
+          text-transform: uppercase;
+          transition: .5s;
+          letter-spacing: 4px;
+          cursor: pointer;
+          outline: 0;
+        
+          &:hover, &:focus {
+            background: #03e9f4;
+            color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 5px #03e9f4,
+            0 0 25px #03e9f4,
+            0 0 50px #03e9f4,
+            0 0 100px #03e9f4;
+        
+          }
+          &_primary{
+              color: #39c4d5;
+              border-color: #39c4d5;
+              box-shadow: 0 0 5px #39c4d5,
+              0 0 25px #39c4d5,
+              0 0 50px #39c4d5,
+              0 0 100px #39c4d5;
+            }
+          
+            &_secondary{
+              color: #607d8b;
+              border-color: #607d8b;
+              box-shadow: 0 0 5px #607d8b,
+              0 0 25px #607d8b,
+              0 0 50px #607d8b,
+              0 0 100px #607d8b;
+            }
+        
+        }
+        .large{
+          padding: 15px 25px;
+          font-size: 20px;
+              .icon{
+                  margin-right: 15px;
+              }
+              .resetMarginRight {
+                  margin-right: 0;
+              }
+          }
+            
+          .small{
+          padding: 7px 10px;
+          font-size: 14px;
+              .icon{
+                  margin-right: 5px;
+              }
+              .resetMarginRight {
+                  margin-right: 0;
+              }
+          }
+        </code></pre>
       <!-- container  -->
     </div>
     <script src="./src/highlight/highlight.pack.js"></script>
