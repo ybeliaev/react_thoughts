@@ -1323,6 +1323,26 @@
               }
           }
         </code></pre>
+
+        <h2>События в React</h2>
+        <div class="alert">
+          <p>В <code>React</code> обработчик события вешается на <code>document</code>, так легче решать вопросы с утечкой памяти(когда нужно удалить обработчик)</p>
+          <p>В будующем планируют обработчик вешать на <code>#root</code></p>
+        </div>
+        <pre><code>
+          function Button({children, kind="primery", size="md", disabled=false}){
+            return &lt;button className = {`btn btn-${kind}`} btn-${size} disabled={disabled}&gt;
+              {children}
+            &lt;/button&gt;
+          }
+
+          let ui = &lt;div&gt;
+            &lt;Button onClick = {event =&gt; console.log(&quot;!&quot;)}&gt;&lt;/Button&gt;
+          &lt;/div&gt;
+          ReactDOM.render(ui, document.getElementtById(&quot;root&quot;))
+        </code></pre>
+        <p>Не работает обработка события. Почему?</p>
+        
       <!-- container  -->
     </div>
     <script src="./src/highlight/highlight.pack.js"></script>
