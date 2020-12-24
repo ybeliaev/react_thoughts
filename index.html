@@ -1398,7 +1398,86 @@
           <p>Свойство <code>target</code> ссылается на дом узел, где было зарегестирировано событие</p>
         </div>
         <h3>Форма. Основы.</h3>
-        
+        <h4>Перехватывать нажатие на кнопку и получение значений полей</h4>
+        <pre><code>
+          function Form({children}){
+            return &lt;form onSubmit={(e)=>{
+
+            }}&gt;
+            {children}
+              
+            &lt;/form&gt;
+          }
+          let ui = &lt;Form&gt;
+            &lt;div&gt;
+              &lt;input autoComplite=&quot;off&quot; name=&quot;username&quot;&gt; UserName
+            &lt;/div&gt;
+            &lt;div&gt;
+              &lt;input autoComplite=&quot;off&quot; name=&quot;email&quot;&gt; Email
+            &lt;/div&gt;
+            &lt;div&gt;
+              &lt;button type=&quot;submit&quot;&gt;Login&lt;/button&gt;
+            &lt;/div&gt;
+          &lt;/Form&gt;
+        </code></pre>
+        <p>Сейчас работает дефолтное устаревшее поведение: при нажатии на кнопку браузер делает get запрос и перегружается</p>
+        <p>Решения:</p>
+        <pre><code>
+          &lt;div&gt;
+              &lt;button type=&quot;button&quot;&gt;Login&lt;/button&gt;
+            &lt;/div&gt;
+        </code></pre>
+        <p>Но теперь нажатие на кнопку не отправляет форму, и мы не можем встроиться в обработчик <code>onSubmit</code></p>
+        <p>Правильно:</p>
+        <pre><code>
+          function Form({children}){
+            return &lt;form onSubmit={(e)=>{
+              <code>e.preventDefault()</code>
+            }}&gt;
+            {children}
+              
+            &lt;/form&gt;
+          }
+        </code></pre>
+        <p>Получаю доступ к элементу формы:</p>
+        <pre><code>
+          function Form({children}){
+            return &lt;form onSubmit={(e)=>{
+              e.preventDefault()
+              console.log(e.target)// = &lt;form&gt; div div div &lt;/form&gt;
+            }}&gt;
+            {children}
+              
+            &lt;/form&gt;
+          }
+        </code></pre>
+        <pre><code>
+          function Form({children}){
+            return &lt;form onSubmit={(e)=>{
+              e.preventDefault()
+              console.log(e.target.elements.username)// = получаю данный input за счёт атрибута name в нём. Это не значение поля, а ссылка на дом узел
+              console.log(e.target.elements.email) 
+              console.log(e.target.email)// shortcut короткая запись              
+            }}&gt;
+            {children}
+              
+            &lt;/form&gt;
+          }
+        </code></pre>
+        <p>Получаю значения узлов формы:</p>
+        <pre><code>
+          function Form({children}){
+            return &lt;form onSubmit={(e)=>{
+              e.preventDefault()
+              let form = e.target;
+              let {username, email} = form;
+              console.log(username.value) // это и будет значение поля
+              console.log(email.value) // это и будет значение поля
+              {children}              
+            &lt;/form&gt;
+          }
+        </code></pre>
+
         
       <!-- container  -->
     </div>
