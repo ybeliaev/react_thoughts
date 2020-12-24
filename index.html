@@ -1342,6 +1342,63 @@
           ReactDOM.render(ui, document.getElementtById(&quot;root&quot;))
         </code></pre>
         <p>Не работает обработка события. Почему?</p>
+        <div class="alert">
+          <p>Компонента не привязывает обработчик сама к дом узлу. У узла <code>button</code> нет <code>onClick</code></p>
+        </div>
+        <p>Нужно:</p>
+        <pre><code>
+          function Button({children, kind="primery", onClick, size="md", disabled=false}){
+            return &lt;button 
+                className = {`btn btn-${kind}`} 
+                btn-${size} 
+                disabled={disabled}
+                <code>onClick={onClick}</code>
+                &gt;
+              {children}
+            &lt;/button&gt;
+          }
+
+          let ui = &lt;div&gt;
+            &lt;Button onClick = {event =&gt; console.log(&quot;!&quot;)}&gt;&lt;/Button&gt;
+          &lt;/div&gt;
+          ReactDOM.render(ui, document.getElementtById(&quot;root&quot;))
+        </code></pre>
+        <h3>Всплывание событий</h3>
+        <p>Что будет в консоли при двух обработчиках:</p>
+        <pre><code>
+          function Button({children, kind="primery", onClick, size="md", disabled=false}){
+            return &lt;button 
+                className = {`btn btn-${kind}`} 
+                btn-${size} 
+                disabled={disabled}
+                onClick={onClick}
+                &gt;
+              {children}
+            &lt;/button&gt;
+          }
+
+          let ui = &lt;div onClick = {event =&gt; console.log(&quot;ui click bubling!&quot;)}
+                        onClickCapture = {event =&gt; console.log(&quot;ui click capturing!&quot;)}
+            &gt;
+            &lt;Button onClick = {event =&gt; console.log(&quot;button click!&quot;)}&gt;&lt;/Button&gt;
+          &lt;/div&gt;
+          ReactDOM.render(ui, document.getElementtById(&quot;root&quot;))
+        </code></pre>
+        <p>Будет: <br> <code>ui click capturing!</code><br><code>ui click!</code><br><code>ui click bubling!</code></p> 
+
+        <h3>onChange, onKeyPress</h3>
+        <pre><code>
+          let ui = &lt;div onkeyPress={event => console.log(event.key)} &gt;
+            &lt;input onChange={(e)=>console.log(e.target.value)}/&gt;
+          &lt;/div&gt;
+          // когда фокус в input = ловит onkeyPress
+        </code></pre>
+
+        <div class="alert">
+          <p>Свойство <code>target</code> ссылается на дом узел, где было зарегестирировано событие</p>
+        </div>
+        <h3>Форма. Основы.</h3>
+        
         
       <!-- container  -->
     </div>
