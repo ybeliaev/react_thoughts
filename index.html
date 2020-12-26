@@ -1477,6 +1477,86 @@
             &lt;/form&gt;
           }
         </code></pre>
+        <h2>Hook useState</h2>
+        <p>Состояние - то, что меняется со временем, от чего зависит более одного виджета.</p>
+        <div class="alert">
+          <p>useState - функция, возвращающая массив</p>
+        </div>
+        <div class="alert">
+          <p>Изменение состояния вызывает перерендер.</p>
+        </div>
+        <div class="alert">
+          <p>Хуки не могут быть в циклах\условиях и должны быть вверху функции.</p>
+        </div>
+        <h3>Найди ошибку</h3>
+        <pre><code>          
+          function App(){
+            let [counter, setCounter] = useState(0)
+            
+            return &lt;div&gt;
+            {counter}
+            &lt;Button onClick={onClick} kind="primery" &gt;+&lt;/Button&gt;
+            
+            &lt;/div&gt;
+          }
+
+          function Button({children, kind, onClick}){
+            return &lt;button 
+                    onClick={setCounter(counter + 1)} 
+                    className={`btn btn-${kind}`} 
+                    &gt;
+                     {children}
+                    &lt;/button&gt;
+          }
+        </code></pre>
+        <p><code>onClick={setCounter(counter + 1)}</code> <code>setCounter</code> вызывается в момент рендера, он меняет <code>state</code> и поэтому снова вызывается = вечный цикл </p>
+        <h2>Ключи</h2>
+        <p>Почему код не меняет местами <code>input</code> а только текст?</p>
+        <pre><code>
+          let initialItems = ["Learn Reract", "Learn TypeScript"]
+
+          function App(){
+            let [items, setItems] = useState(initialItems)
+
+            function handleClick(){
+              setItems(...[items].reverse())
+            }
+
+            return &lt;div&gt;
+              &lt;ul&gt;
+                {items.map((item)=>
+                  &lt;li&gt;
+                    &lt;label&gt;
+                      &lt;input type=&quot;checkbox&quot;/&gt;
+                     {item}                  
+                    &lt;/label&gt;
+                  &lt;/li&gt;
+                )}
+                &lt;button onClick=(handleClick) &gt;Reverse&lt;/button&gt;                
+              &lt;/ul&gt;              
+            &lt;/div&gt;
+          }
+        </code></pre>
+        <p>При сравнении двух состояний чекбоксы остаются неизменными, а меняется текст. Поэтому Реакт меняет только его.</p>
+        <h3>Как сделать чтобы чекбокс перемещался со строкой?</h3>
+        <pre><code>
+          ... 
+          return &lt;div&gt;
+              &lt;ul&gt;
+                {items.map((item, idx)=>
+                  &lt;li <code>key={item}</code>&gt;
+                    &lt;label&gt;
+                      &lt;input type=&quot;checkbox&quot;/&gt;
+                     {item}                  
+                    &lt;/label&gt;
+                  &lt;/li&gt;
+                )}
+                &lt;button onClick=(handleClick) &gt;Reverse&lt;/button&gt;                
+              &lt;/ul&gt;              
+            &lt;/div&gt;
+        </code></pre>
+        <p>Если &lt;li <code>key={idx}</code>&gt; - этот идентификатор не идентифицирует строку списка уникальной</p>
+        <p>Т.е передан offset - смещение. Поведение станет старым. Для списков, которые точно не меняют свою длинну, положение элементов такой идентификатор возможен.</p>
 
         
       <!-- container  -->
