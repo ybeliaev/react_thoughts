@@ -1605,14 +1605,24 @@
                                  "danger"
           }
         </code></pre>
+        <h2>Представление данных</h2>
+        <pre><code>
+          const todos = {
+            "aSd": {id: "aSd", text: "First", done: false},
+            "Fv1": {id: "Fv1", text: "Second", done: false},
+            "HCx": {id: "HCx", text: "Third", done: false},
+            "Pfh": {id: "Pfh", text: "Four", done: false},
+          }
+
+          // вывод каждого элемента (неупорядоченно)
+          Object.keys(todos).map(key=>console.log(todos[key]["text"])) // First Second Third Four
+        </code></pre>
 
 
         
       <!-- container  -->
-    </div>
+    
     <script src="./src/highlight/highlight.pack.js"></script>
-    <script>
-      hljs.initHighlightingOnLoad();
-    </script>
+    <script>hljs.initHighlightingOnLoad();</script>
   </body>
 </html>
