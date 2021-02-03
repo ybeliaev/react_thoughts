@@ -1615,7 +1615,24 @@
           }
 
           // вывод каждого элемента (неупорядоченно)
-          Object.keys(todos).map(key=>console.log(todos[key]["text"])) // First Second Third Four
+          Object.keys(todos).map(key=>todos[key]["text"]) // [First, Second, Third, Four]
+
+          // удаление элемента
+          function removeElement(key){
+            const newTodos = {...todos}
+            delete newTodos[key] 
+            return newTodos
+          }
+
+          // изменение значения ключа
+          function toggleElement(id){
+            const newTodos = {...todos}
+            const todo = todos[id]
+            newTodos[id] = {...todo, done: !todo.done}
+            return newTodos
+          }
+
+
         </code></pre>
 
 
