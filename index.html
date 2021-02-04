@@ -1645,21 +1645,46 @@
 
             }
           })
-          //VARIANT - 2 (offten better)
-          <pre><code>
-            let [inputs, setInputs] = useState({
-              title: "",
-              body: "",
-              status: "DRAFT"
-            })
-            let [errors, setErrors] = useState({
-
-            })
-          </code></pre>
-        </code></pre>
-
-
         
+        //VARIANT - 2 (offten better)
+        
+          let [inputs, setInputs] = useState({
+            title: "",
+            body: "",
+            status: "DRAFT"
+          })
+          let [errors, setErrors] = useState({
+
+          })
+        </code></pre>
+        <h2>Сосотояние форм - 2</h2>
+        <pre><code>
+          // функция работы с состоянием для варианта 2
+          function setTitle(title){
+            setInputs({
+              ...inputs,
+              title,
+            })
+          }
+          function setBody(body){
+            setInputs({
+              ...inputs,
+              body,
+            })
+          }
+          ...
+          // тогда нужно и такие же ф-ии для других полей = вернулись к проблеме мультипликации
+          // при частом вызове отдельных ф-ий это полезно
+
+        </code></pre>
+        <h3>Реализация универсальной функции для события onChange</h3>
+        <pre><code>
+          function onChange(event){
+            let{target:{type, name, value, checked, selected}} = event
+            value = type == "checkbox" ? checked : (selected || value) // здесь selected из-за некоторых библиотек, обычно хватит value
+            setInputs(inputs => ({...inputs, [name]: value}))
+          }
+        </code></pre>        
       <!-- container  -->
     
     <script src="./src/highlight/highlight.pack.js"></script>
