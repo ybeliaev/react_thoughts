@@ -1631,8 +1631,31 @@
             newTodos[id] = {...todo, done: !todo.done}
             return newTodos
           }
+        </code></pre>
+        <h2>Состояния форм - 1</h2>
+        <pre><code>
+          // VARIANT 1
+          let [form, setForm] = useState({
+            inputs: {
+              title: "",
+              body: "",
+              status: "DRAFT"
+            },
+            errors: {
 
+            }
+          })
+          //VARIANT - 2 (offten better)
+          <pre><code>
+            let [inputs, setInputs] = useState({
+              title: "",
+              body: "",
+              status: "DRAFT"
+            })
+            let [errors, setErrors] = useState({
 
+            })
+          </code></pre>
         </code></pre>
 
 
