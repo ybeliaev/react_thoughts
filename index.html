@@ -1684,7 +1684,16 @@
             value = type == "checkbox" ? checked : (selected || value) // здесь selected из-за некоторых библиотек, обычно хватит value
             setInputs(inputs => ({...inputs, [name]: value}))
           }
-        </code></pre>        
+        </code></pre>   
+        <h3>Possible mistakes with state</h3>
+        <pre><code>
+          const [data, setData] = useState({})
+          // here useEffect(()=>{}, [])
+          {data && &lt;div&gt; data.current.somedata &lt;/div&gt;}
+          // so it will be a mistake 'current is undefined' becase data is not download AND {} in useState always = true
+          // should be const [data, setData] = useState(null)
+          
+        </code></pre> 
       <!-- container  -->
     
     <script src="./src/highlight/highlight.pack.js"></script>
